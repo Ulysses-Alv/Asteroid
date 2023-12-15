@@ -3,6 +3,8 @@ using UnityEngine;
 
 public static class GameStateManager
 {
+    //El uso de UniRx para levar a cabo el patron observer es meramente personal.
+    //Considero las propiedades reactivas mas legibles que los eventos de unity.
     public static ReactiveProperty<GameStates> actualGameState { get; private set; }
 
     public static void EndGame()
@@ -22,7 +24,6 @@ public static class GameStateManager
             default:
                 break;
         }
-        Debug.Log(actualGameState.Value);
     }
 
     public static bool IsPlaying()

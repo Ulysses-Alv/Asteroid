@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace ObjectPoolingPattern
 {
+    //Sistema de Pooling de mi repositorio "https://github.com/Ulysses-Alv/Patterns"
     public static class ObjectPooling
     {
 

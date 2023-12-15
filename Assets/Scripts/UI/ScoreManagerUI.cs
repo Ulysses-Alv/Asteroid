@@ -5,7 +5,7 @@ public class ScoreManagerUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
 
-    public void updateActualScore(int actualScore)
+    public void UpdateActualScore(int actualScore)
     {
         text.text = actualScore.ToString();
     }

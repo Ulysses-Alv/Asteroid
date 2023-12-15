@@ -1,8 +1,7 @@
 ﻿using ObjectPoolingPattern;
 using UnityEngine;
 
-public class SetUp
-    : MonoBehaviour
+public class SetUp : MonoBehaviour
 {
     private void Awake()
     {

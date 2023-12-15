@@ -1,6 +1,5 @@
 ﻿public class ExplosionEffect : EffectSound
 {
-   
     public static ExplosionEffect Instance { get; private set;}
     private void Awake()
     {
@@ -10,5 +9,4 @@
     {
         audioSource.Play();
     }
-   
 }

@@ -14,7 +14,7 @@ public class ScoreManager : MonoBehaviour
     public void AddScore(float health)
     {
         actualScore += Mathf.RoundToInt(health);
-        ui.updateActualScore(actualScore);
+        ui.UpdateActualScore(actualScore);
         HighScoreManager.instance.UpdateHighScore(actualScore);
     }
 }
