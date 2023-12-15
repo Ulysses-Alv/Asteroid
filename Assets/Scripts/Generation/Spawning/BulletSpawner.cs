@@ -1,7 +1,7 @@
 using ObjectPoolingPattern;
 using System;
 using UnityEngine;
-
+using UniRx;
 public class BulletSpawner : MonoBehaviour, ISpawnObject
 {
     [SerializeField] private GameObject bulletPrefab;
@@ -16,6 +16,7 @@ public class BulletSpawner : MonoBehaviour, ISpawnObject
 
     private Rigidbody2D rb => GetComponentInParent<Rigidbody2D>();
 
+    #region SetInstance
     private void Awake()
     {
         SetInstance();
@@ -25,11 +26,22 @@ public class BulletSpawner : MonoBehaviour, ISpawnObject
     {
         if (instance == null) { instance = this; }
     }
+    #endregion
 
     private void Start()
     {
         ObjectPooling.PreLoad(bulletPrefab, 20);
+        GameStateManager.actualGameState.Subscribe(StopShooting);
     }
+
+    private void StopShooting(GameStates states)
+    {
+        if(states != GameStates.Playing)
+        {
+            StopShooting();
+        }
+    }
+
     public void SpawnObjects()
     {
         timer += Time.deltaTime;
@@ -37,8 +49,10 @@ public class BulletSpawner : MonoBehaviour, ISpawnObject
         if (timer > timeBetweenSpawn)
         {
             timer -= timeBetweenSpawn;
+            
             GameObject bullet = ObjectPooling.GetObject(bulletPrefab);
             bullet.GetComponent<Bullet>().ShootBullet(transform.position, target, rb.velocity);
+            ShootEffect.Instance.PlayShootSound();
         }
     }
     private void Update()

@@ -4,7 +4,7 @@ using ObjectPoolingPattern;
 public class EnemiesSpawner : MonoBehaviour, ISpawnObject
 {
     [SerializeField] private AsteroidSpawnConfiguration spawnConfig;
-    
+
     private SpawnerTimer spawnerTimer => GetComponent<SpawnerTimer>();
     private EnemySpawnLogic SpawnLogic => GetComponent<AsteroidSpawnLogic>(); //inyecto la logica de spawn, aquí solo necesitamos uno pero permite la extensibilidad
 
@@ -20,5 +20,16 @@ public class EnemiesSpawner : MonoBehaviour, ISpawnObject
     public void SpawnObjects()
     {
         SpawnLogic.SpawnEnemy(spawnConfig.spawnCount, spawnConfig.prefab);
+    }
+
+    void Update()
+    {
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            SpawnObjects();
+        }
+
+#endif
     }
 }

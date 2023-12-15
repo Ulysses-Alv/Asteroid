@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 983bf2a6ba5723d418f80ed76d35fc5e, type: 3}
   m_Name: Base Asteroid
   m_EditorClassIdentifier: 
-  spawnCount: 7
+  spawnCount: 12
   preloadAmount: 20
   timeBetweenSpawn: 5
   prefab: {fileID: 3355864092793248544, guid: f0d5b988bd0ac5d468bba5df586cdd89, type: 3}

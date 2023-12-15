@@ -6,41 +6,62 @@ namespace InputSystem
     public class InputManager : MonoBehaviour
     {
         [SerializeField] private PlayerInputMap playerInputMap;
+
+        private bool isPlaying => GameStateManager.IsPlaying();
         private void Awake()
         {
             playerInputMap = new PlayerInputMap();
 
             playerInputMap.Player.Enable();
+
+            playerInputMap.Player.PauseGame.performed += PauseGame;
             playerInputMap.Player.Shoot.started += ShootStarted;
             playerInputMap.Player.Shoot.canceled += ShootCanceled;
         }
 
+        #region Movement
+
+        private void MovePlayer(Vector2 input)
+        {
+            PlayerMovementController.instance.Move(input);
+        }
+
+        private void Update()
+        {
+            if (!isPlaying) return;
+
+            Vector2 input = playerInputMap.Player.Movement.ReadValue<Vector2>();
+            MovePlayer(input);
+        }
+
+        #endregion
+
+        #region Shoot
         private void ShootCanceled(InputAction.CallbackContext context)
         {
-            if (GameStateManager.instance.actualGameState.Value == GameStates.Lose) return;
+            if (!isPlaying) return;
 
             BulletSpawner.instance.StopShooting();
         }
 
         private void ShootStarted(InputAction.CallbackContext context)
         {
-            if (GameStateManager.instance.actualGameState.Value == GameStates.Lose) return;
+            if (!isPlaying) return;
 
             BulletSpawner.instance.StartShooting();
         }
+        #endregion
 
-        private void Update()
+        #region Pause
+        private void PauseGame(InputAction.CallbackContext context)
         {
-            if (GameStateManager.instance.actualGameState.Value == GameStates.Lose) return;
-
-            Vector2 input = playerInputMap.Player.Movement.ReadValue<Vector2>();
-            
-            MovePlayer(input);
+            if (context.performed)
+            {
+                print("hola");
+                GameStateManager.AlternatePause();
+            }
         }
-        private void MovePlayer(Vector2 input)
-        {
-            PlayerMovementController.instance.Move(input);
-        }
+        #endregion
     }
 
 }

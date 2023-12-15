@@ -3,15 +3,16 @@
 public class HighScoreManager : MonoBehaviour
 {
     public static HighScoreManager instance;
-    
+
     [SerializeField] private HighScoreManagerUI ui;
 
-    int actualHighScore;
+    private int actualHighScore;
+    private bool surpassedHighscoreBefore = false;
 
     private void Awake()
     {
         instance = this;
-        actualHighScore = PlayerPrefs.GetInt("High Score", actualHighScore);
+        actualHighScore = PlayerPrefs.GetInt(StringTags.GetHighScoreString(), actualHighScore);
     }
     void Start()
     {
@@ -21,8 +22,15 @@ public class HighScoreManager : MonoBehaviour
     {
         if (score < actualHighScore) return;
 
+        if (!surpassedHighscoreBefore)
+        {
+            HighScoreEffect.Instance.PlayHighscore(); 
+            //esto es para que solo se haga una vez y no cada vez que se supera el puntaje anterior.
+        }
+
         actualHighScore = score;
-        PlayerPrefs.SetInt("High Score", actualHighScore);
+        PlayerPrefs.SetInt(StringTags.GetHighScoreString(), actualHighScore);
         ui.UpdateText(actualHighScore);
+        surpassedHighscoreBefore = true;
     }
 }

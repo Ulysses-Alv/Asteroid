@@ -32,11 +32,13 @@ public class AsteroidSpawnLogic : EnemySpawnLogic
     }
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.yellow;
+        Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, minRadius);
+        Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, maxRadius);
-
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, maxDistance);
     }
+    
+
 }

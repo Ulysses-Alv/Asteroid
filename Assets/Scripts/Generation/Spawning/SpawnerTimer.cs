@@ -9,7 +9,7 @@ public class SpawnerTimer : MonoBehaviour
 
     private float timer;
     private float timeToFirstSpawn = 1f;
-   
+
     private readonly Subject<Unit> triggerSubject = new Subject<Unit>();
     public IObservable<Unit> OnTrigger => triggerSubject;
 
@@ -17,7 +17,7 @@ public class SpawnerTimer : MonoBehaviour
 
     private void Start()
     {
-        GameStateManager.instance.actualGameState.Subscribe(PauseTimer);
+        GameStateManager.actualGameState.Subscribe(AlternateTimer);
         StartCoroutine(StartTimer());
     }
     private void Update()
@@ -31,11 +31,22 @@ public class SpawnerTimer : MonoBehaviour
         timerAction = Timer;
     }
 
-    private void PauseTimer(GameStates gameState)
+    private void AlternateTimer(GameStates gameState)
     {
-        if (gameState != GameStates.Lose) return;
+        switch (gameState)
+        {
+            case GameStates.Playing:
+                timerAction = Timer;
+                break;
 
-        timerAction = null;
+            case GameStates.Paused:
+                timerAction = null;
+                break;
+
+            default:
+                timerAction = null;
+                break;
+        }
     }
 
     private void Timer()

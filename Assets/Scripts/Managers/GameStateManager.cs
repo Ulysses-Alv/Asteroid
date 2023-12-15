@@ -1,29 +1,43 @@
 ﻿using UniRx;
 using UnityEngine;
 
-public class GameStateManager : MonoBehaviour
+public static class GameStateManager
 {
-    public static GameStateManager instance { get; private set; }
-    public ReactiveProperty<GameStates> actualGameState { get; private set; }
+    public static ReactiveProperty<GameStates> actualGameState { get; private set; }
 
-    private void Awake()
-    {
-        actualGameState = new ReactiveProperty<GameStates>(initialValue: GameStates.Menu);
-        DontDestroyOnLoad(gameObject);
-        SetInstance();
-    }
-
-    private void SetInstance()
-    {
-        if (instance != null && instance != this) 
-            Destroy(instance);
-
-        instance = this;
-    }
-
-    public void EndGame()
+    public static void EndGame()
     {
         actualGameState.Value = GameStates.Lose;
+    }
+    public static void AlternatePause()
+    {
+        switch (actualGameState.Value)
+        {
+            case GameStates.Playing:
+                actualGameState.Value = GameStates.Paused;
+                break;
+            case GameStates.Paused:
+                actualGameState.Value = GameStates.Playing;
+                break;
+            default:
+                break;
+        }
+        Debug.Log(actualGameState.Value);
+    }
+
+    public static bool IsPlaying()
+    {
+        return actualGameState.Value == GameStates.Playing;
+    }
+
+    public static void InitializeGame()
+    {
+        actualGameState = new ReactiveProperty<GameStates>(GameStates.Menu);
+    }
+
+    public static void StartPlaying()
+    {
+        actualGameState.Value = GameStates.Playing;
     }
 }
 
