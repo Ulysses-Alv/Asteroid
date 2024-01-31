@@ -5,9 +5,15 @@ public class EnemiesSpawner : MonoBehaviour, ISpawnObject
 {
     [SerializeField] private AsteroidSpawnConfiguration spawnConfig;
 
-    private SpawnerTimer spawnerTimer => GetComponent<SpawnerTimer>();
-    private EnemySpawnLogic SpawnLogic => GetComponent<AsteroidSpawnLogic>(); //inyecto la logica de spawn, aquí solo necesitamos uno pero permite la extensibilidad
+    private SpawnerTimer spawnerTimer;
+    private EnemySpawnLogic SpawnLogic; //inyecto la logica de spawn, aquí solo necesitamos uno pero permite la extensibilidad
 
+    private void Awake() 
+    {
+        spawnerTimer = GetComponent<SpawnerTimer>();
+        SpawnLogic = GetComponent<AsteroidSpawnLogic>();
+    }
+    
     private void Start()
     {
         spawnerTimer.timeBetweenSpawn = spawnConfig.timeBetweenSpawn;
@@ -21,15 +27,14 @@ public class EnemiesSpawner : MonoBehaviour, ISpawnObject
     {
         SpawnLogic.SpawnEnemy(spawnConfig.spawnCount, spawnConfig.prefab);
     }
-
+    
+#if UNITY_EDITOR
     void Update()
     {
-#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.C))
         {
             SpawnObjects();
         }
-
-#endif
     }
+#endif
 }
